@@ -16,10 +16,10 @@ export default function RootLayout({
         <nav className='flex justify-between p-4'>
           <h1>logo</h1>
           <ul className='flex'>
-            <li className='px-2'>
+            <li className='px-2 hover:underline'>
               <a href="./">Home</a>
             </li>
-            <li className='px-2'>
+            <li className='px-2 hover:underline'>
               <a href="about">About</a>
             </li>
           </ul>

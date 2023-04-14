@@ -1,13 +1,11 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
-
 export default function Home() {
+  const userLocation = {};
+
   return (
-    <main className='flex justify-center'>
-      <h1 className="text-lg py-2 m-4">My first Next.JS app</h1>
+    <main className='flex flex-col items-center'>
+      <h1 className="text-lg py-2 m-4 font-semibold">My first Next.JS app</h1>
+      <p className="p-5">Welcome to my first Next.js app. I'm mostly just messing around as I try to learn Next.js, Tailwind CSS, and Typescript while also brushing up on React.</p>
+      <button className="rounded-full text-white bg-sky-500 p-5 hover:bg-sky-600 active:bg-sky-700">Get User Location</button>
     </main>
   )
 }
