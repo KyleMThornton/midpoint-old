@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Home() {
   const [myLocationLat, setMyLocationLat] = useState<number>();
   const [myLocationLon, setMyLocationLon] = useState<number>();
   const [theirLocationLat, setTheirLocationLat] = useState<number>();
   const [theirLocationLon, setTheirLocationLon] = useState<number>();
+  const [zip, setZip] = useState<number>();
 
   async function getMyLocation() {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -15,8 +17,10 @@ export default function Home() {
     })
   }
 
-  async function setTheirLocation() {
-
+  async function getTheirLocation() {
+    await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${API}&components=postal_code:${zip}`).then(response => {
+      console.log(response.data)
+    })
   }
 
   async function clearLocation() {
@@ -36,8 +40,8 @@ export default function Home() {
             {myLocationLon ? <h2>Lon: {myLocationLon}</h2> : null }
           </div>
           <div className="flex flex-col items-center">
-            <button className="rounded-full text-white bg-sky-500 p-4 hover:bg-sky-600 active:bg-sky-700 w-60">Get Second Location</button>
-            <input type="text" className="border-2 border-black border-solid rounded m-5 w-60" />
+            <button className="rounded-full text-white bg-sky-500 p-4 hover:bg-sky-600 active:bg-sky-700 w-60" onClick={getTheirLocation}>Get Second Location</button>
+            <input type="text" className="border-2 border-black border-solid rounded m-5 w-60" value={zip} />
           </div>
         </div>
         <div>
