@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { get } from "http";
 
 const API = '';
 
@@ -11,8 +10,8 @@ export default function Home() {
   const [myLocationLon, setMyLocationLon] = useState<number>();
   const [theirLocationLat, setTheirLocationLat] = useState<number>();
   const [theirLocationLon, setTheirLocationLon] = useState<number>();
-  const [zip, setZip] = useState<number>();
-  const inputRef = useRef<any>(null);
+  const [inputValue, setInputValue] = useState<any>();
+  const inputRef = useRef<any>();
 
   async function getMyLocation() {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -21,8 +20,8 @@ export default function Home() {
     })
   }
 
-  async function getTheirLocation() {
-    await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:${zip}&key=${API}`).then(response => {
+  async function getTheirLocation(zipCode: number | undefined) {
+    await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:${zipCode}&key=${API}`).then(response => {
       console.log(response.data)
     })
   }
@@ -32,9 +31,12 @@ export default function Home() {
     setMyLocationLon(0);
   }
 
-  async function handleClick() {
-    setZip(inputRef.current.value)
-    getTheirLocation();
+  // const handleInputChange = (event: { target: { value: any; }; }) => {
+  //   setInputValue(event.target.value);
+  // }
+
+  const handleClick = () => {
+    getTheirLocation(inputRef.current.value);
   }
 
   return (
@@ -52,7 +54,9 @@ export default function Home() {
             <button className="rounded-full text-white bg-sky-500 p-4 hover:bg-sky-600 active:bg-sky-700 w-60" onClick={handleClick}>Get Second Location</button>
             <input 
               type="text" 
-              className="border-2 border-black border-solid rounded m-5 w-60" 
+              className="border-2 border-black border-solid rounded m-5 w-60"
+              value={inputValue}
+              // onChange={handleInputChange}
               ref={inputRef} 
             />
           </div>
