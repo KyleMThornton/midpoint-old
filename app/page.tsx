@@ -1,7 +1,10 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { get } from "http";
+
+const API = '';
 
 export default function Home() {
   const [myLocationLat, setMyLocationLat] = useState<number>();
@@ -9,6 +12,7 @@ export default function Home() {
   const [theirLocationLat, setTheirLocationLat] = useState<number>();
   const [theirLocationLon, setTheirLocationLon] = useState<number>();
   const [zip, setZip] = useState<number>();
+  const inputRef = useRef<any>(null);
 
   async function getMyLocation() {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -18,7 +22,7 @@ export default function Home() {
   }
 
   async function getTheirLocation() {
-    await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${API}&components=postal_code:${zip}`).then(response => {
+    await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:${zip}&key=${API}`).then(response => {
       console.log(response.data)
     })
   }
@@ -26,6 +30,11 @@ export default function Home() {
   async function clearLocation() {
     setMyLocationLat(0);
     setMyLocationLon(0);
+  }
+
+  async function handleClick() {
+    setZip(inputRef.current.value)
+    getTheirLocation();
   }
 
   return (
@@ -40,8 +49,12 @@ export default function Home() {
             {myLocationLon ? <h2>Lon: {myLocationLon}</h2> : null }
           </div>
           <div className="flex flex-col items-center">
-            <button className="rounded-full text-white bg-sky-500 p-4 hover:bg-sky-600 active:bg-sky-700 w-60" onClick={getTheirLocation}>Get Second Location</button>
-            <input type="text" className="border-2 border-black border-solid rounded m-5 w-60" value={zip} />
+            <button className="rounded-full text-white bg-sky-500 p-4 hover:bg-sky-600 active:bg-sky-700 w-60" onClick={handleClick}>Get Second Location</button>
+            <input 
+              type="text" 
+              className="border-2 border-black border-solid rounded m-5 w-60" 
+              ref={inputRef} 
+            />
           </div>
         </div>
         <div>
